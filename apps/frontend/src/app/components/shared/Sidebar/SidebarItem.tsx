@@ -74,7 +74,8 @@ const SidebarItem: React.FC<SidebarItemProps> = memo(
           }
         >
           {isChosen && (
-            <span className="absolute left-2 w-2 h-2 bg-white rounded-full" />
+            <span className="absolute left-0 top-0 w-4 h-4 bg-white rounded-full" />
+            // <></>
           )}
           {item.icon && <span>{item.icon}</span>}
         </div>
