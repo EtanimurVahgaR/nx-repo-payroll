@@ -8,12 +8,17 @@ export function App() {
   return (
     <div>
       <Routes>
-        <Route path="/" element={<SidebarLayout />}>
-          <Route path="/" element={<Dashboard />} />
-          <Route path="/auth" element={<Outlet />}>
-            <Route path="login" element={<Login />} />
-            <Route path="signup" element={<Signup />} />
-          </Route>
+        <Route path="/auth" element={<Outlet />}>
+          <Route path="login" element={<Login />} />
+          <Route path="signup" element={<Signup />} />
+        </Route>
+      </Routes>
+      <Routes>
+        <Route element={<SidebarLayout />}>
+          <Route path="/" element={<Dashboard />} index />
+          <Route path="/2" element={<>2</>} />
+          <Route path="/3" element={<>3</>} />
+          <Route path="/4" element={<>4</>} />
         </Route>
       </Routes>
     </div>
