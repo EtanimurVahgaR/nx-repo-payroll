@@ -1,4 +1,5 @@
-import Sidebar from '../components/shared/Sidebar';
+import Sidebar from '../components/shared/Sidebar/Sidebar';
+
 import { Outlet } from 'react-router-dom';
 
 const SidebarLayout = () => {

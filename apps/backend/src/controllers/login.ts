@@ -6,3 +6,4 @@ export const login = async (req: any, res: any) => {
   // Actual endpoint: just echo back the email for now
   return res.json({ message: 'Login received', email });
 };
+  
