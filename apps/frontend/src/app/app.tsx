@@ -4,6 +4,7 @@ import Signup from './features/auth/Signup';
 import Dashboard from './features/dashboard/Dashboard';
 import SidebarLayout from './layout/SidebarLayout';
 import Employee from './features/employees/Employee';
+import AddEmployeeForm from './features/employees/Forms/AddEmployeeForm';
 
 export function App() {
   return (
@@ -16,8 +17,7 @@ export function App() {
         <Route element={<SidebarLayout />}>
           <Route path="/" element={<Dashboard />} index />
           <Route path="/employees" element={<Employee />} />
-          <Route path="/employees" element={<Employee />} />
-          
+          <Route path="/employees/add-new" element={<AddEmployeeForm />} />
         </Route>
       </Routes>
     </div>

@@ -45,3 +45,73 @@ export const get_all_employees = async (req: any, res: any) => {
     return res.status(500).json({ message: 'Error fetching employees', error });
   }
 };
+
+export const add_new_employee = async (req: any, res: any) => {
+  try {
+    let {
+      employeeCode,
+      name,
+      designation,
+      trade,
+      grade,
+      dateOfJoining,
+      dob,
+      phoneNumber,
+      address,
+      aadharNumber,
+      pan,
+      bankName,
+      ifscCode,
+      accountNumber,
+      fathersName,
+      motherName,
+      marriedStatus,
+      spouseName,
+      childrenName,
+      uanNumber,
+      gender,
+      esicNumber,
+      projectId,
+      emergencyStatusNo,
+    } = req.body;
+
+    // Convert empty strings to null for optional fields
+    const toNull = (v: any) => (v === '' ? null : v);
+
+    const data = {
+      employeeCode,
+      name,
+      designation,
+      trade,
+      grade,
+      dateOfJoining: toNull(dateOfJoining) ? new Date(dateOfJoining) : null,
+      dob: toNull(dob) ? new Date(dob) : null,
+      phoneNumber: toNull(phoneNumber),
+      address: toNull(address),
+      aadharNumber: toNull(aadharNumber),
+      pan: toNull(pan),
+      bankName: toNull(bankName),
+      ifscCode: toNull(ifscCode),
+      accountNumber: toNull(accountNumber),
+      fathersName: toNull(fathersName),
+      motherName: toNull(motherName),
+      marriedStatus: toNull(marriedStatus),
+      spouseName: toNull(spouseName),
+      childrenName: toNull(childrenName),
+      uanNumber: toNull(uanNumber),
+      gender: toNull(gender),
+      esicNumber: toNull(esicNumber),
+      projectId: toNull(projectId),
+      emergencyStatusNo: toNull(emergencyStatusNo),
+    };
+
+    const employee = await prisma.employee.create({
+      data,
+    });
+
+    return res.status(201).json(employee);
+  } catch (error) {
+    console.error('Error in add_new_employee:', error);
+    return res.status(500).json({ message: 'Error creating employee', error });
+  }
+};
