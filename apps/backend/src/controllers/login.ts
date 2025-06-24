@@ -4,5 +4,5 @@ export const login = async (req: any, res: any) => {
     return res.status(400).json({ message: 'Email and password required ' });
   }
   // Actual endpoint: just echo back the email for now
-  return res.json({ message: 'Login received', email });
+  return res.status(200).json({ message: 'Login received', email });
 };
