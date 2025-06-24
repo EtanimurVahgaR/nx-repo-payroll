@@ -8,10 +8,53 @@ interface EmployeeType {
   designation: string;
   trade: string;
   grade: string;
-  dateOfJoining: string;
-  phoneNumber: string;
-  projectId: string;
+  dateOfJoining?: string;
+  dob?: string;
+  phoneNumber?: string;
+  address?: string;
+  aadharNumber?: string;
+  pan?: string;
+  bankName?: string;
+  ifscCode?: string;
+  accountNumber?: string;
+  fathersName?: string;
+  motherName?: string;
+  marriedStatus?: string;
+  spouseName?: string;
+  childrenName?: string;
+  uanNumber?: string;
+  gender?: string;
+  esicNumber?: string;
+  projectId?: string;
+  emergencyStatusNo?: string;
 }
+
+const employeeFields: { key: keyof EmployeeType; label: string }[] = [
+  { key: 'employeeCode', label: 'Employee Code' },
+  { key: 'name', label: 'Name' },
+  { key: 'designation', label: 'Designation' },
+  { key: 'trade', label: 'Trade' },
+  { key: 'grade', label: 'Grade' },
+  { key: 'dateOfJoining', label: 'Date Of Joining' },
+  { key: 'dob', label: 'DOB' },
+  { key: 'phoneNumber', label: 'Phone Number' },
+  { key: 'address', label: 'Address' },
+  { key: 'aadharNumber', label: 'Aadhar Number' },
+  { key: 'pan', label: 'PAN' },
+  { key: 'bankName', label: 'Bank Name' },
+  { key: 'ifscCode', label: 'IFSC Code' },
+  { key: 'accountNumber', label: 'Account Number' },
+  { key: 'fathersName', label: "Father's Name" },
+  { key: 'motherName', label: "Mother's Name" },
+  { key: 'marriedStatus', label: 'Married Status' },
+  { key: 'spouseName', label: 'Spouse Name' },
+  { key: 'childrenName', label: 'Children Name' },
+  { key: 'uanNumber', label: 'UAN Number' },
+  { key: 'gender', label: 'Gender' },
+  { key: 'esicNumber', label: 'ESIC Number' },
+  { key: 'projectId', label: 'Project ID' },
+  { key: 'emergencyStatusNo', label: 'Emergency Status No' },
+];
 
 const Employee = () => {
   const [employees, setEmployees] = useState<EmployeeType[]>([]);
@@ -58,10 +101,11 @@ const Employee = () => {
     );
 
     return filtered.sort((a, b) => {
-      if (a[sortConfig.key] < b[sortConfig.key])
-        return sortConfig.direction === 'asc' ? -1 : 1;
-      if (a[sortConfig.key] > b[sortConfig.key])
-        return sortConfig.direction === 'asc' ? 1 : -1;
+      const aValue = a[sortConfig.key];
+      const bValue = b[sortConfig.key];
+      if (aValue === undefined || bValue === undefined) return 0;
+      if (aValue < bValue) return sortConfig.direction === 'asc' ? -1 : 1;
+      if (aValue > bValue) return sortConfig.direction === 'asc' ? 1 : -1;
       return 0;
     });
   };
@@ -103,23 +147,14 @@ const Employee = () => {
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-50">
             <tr>
-              {[
-                'employeeCode',
-                'name',
-                'designation',
-                'trade',
-                'grade',
-                'dateOfJoining',
-                'phoneNumber',
-                'projectId',
-              ].map((key) => (
+              {employeeFields.map(({ key, label }) => (
                 <th
                   key={key}
-                  onClick={() => sortData(key as keyof EmployeeType)}
+                  onClick={() => sortData(key)}
                   className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100"
                 >
                   <div className="flex items-center space-x-1">
-                    <span>{key.charAt(0).toUpperCase() + key.slice(1)}</span>
+                    <span>{label}</span>
                     {sortConfig.key === key && (
                       <span>{sortConfig.direction === 'asc' ? '↑' : '↓'}</span>
                     )}
@@ -137,34 +172,18 @@ const Employee = () => {
                 key={employee.id}
                 className="hover:bg-gray-50 transition-colors duration-200"
               >
-                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                  {employee.employeeCode}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                  {employee.name}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  {employee.designation}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  {employee.trade}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
-                    {employee.grade}
-                  </span>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  {employee.dateOfJoining
-                    ? new Date(employee.dateOfJoining).toLocaleDateString()
-                    : 'N/A'}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  {employee.phoneNumber || 'N/A'}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  {employee.projectId || 'N/A'}
-                </td>
+                {employeeFields.map(({ key }) => (
+                  <td
+                    key={key}
+                    className="px-6 py-4 whitespace-nowrap text-sm text-gray-500"
+                  >
+                    {key === 'dateOfJoining' || key === 'dob'
+                      ? employee[key]
+                        ? new Date(employee[key] as string).toLocaleDateString()
+                        : 'N/A'
+                      : employee[key] || 'N/A'}
+                  </td>
+                ))}
                 <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                   <button className="text-indigo-600 hover:text-indigo-900">
                     View
