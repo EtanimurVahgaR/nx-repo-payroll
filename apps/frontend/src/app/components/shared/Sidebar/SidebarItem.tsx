@@ -1,6 +1,7 @@
 import React, { memo } from 'react';
 import { RightArrow, DownArrow } from './SidebarIcons';
 import { isInOpenChain, getLighterSidebarColor } from './sidebarUtils';
+import { Link } from 'react-router-dom';
 
 export type SidebarItemProps = {
   item: any;
@@ -83,24 +84,68 @@ const SidebarItem: React.FC<SidebarItemProps> = memo(
 
     return (
       <div className="relative">
-        <div
-          className="flex items-center h-9 m-2 rounded-2xl cursor-pointer"
-          style={{
-            marginLeft: 16 + depth * 16,
-            paddingLeft: 10,
-            background: bgColor,
-          }}
-          onClick={() => toggleItem(key, hasChildren)}
-        >
-          {isChosen && <span className="mr-2 w-2 h-2 bg-white rounded-full" />}
-          {item.icon && <span className="mr-2 text-[18px]">{item.icon}</span>}
-          <span className="flex-1">{item.label}</span>
-          {hasChildren && (
-            <span className="ml-2 pr-3">
-              {isOpen ? <DownArrow /> : <RightArrow />}
-            </span>
-          )}
-        </div>
+        {hasChildren ? (
+          <div
+            className="flex items-center h-9 m-2 rounded-2xl cursor-pointer"
+            style={{
+              marginLeft: 16 + depth * 16,
+              paddingLeft: 10,
+              background: bgColor,
+            }}
+            onClick={() => toggleItem(key, hasChildren)}
+          >
+            {isChosen && (
+              <span className="mr-2 w-2 h-2 bg-white rounded-full" />
+            )}
+            {item.icon && <span className="mr-2 text-[18px]">{item.icon}</span>}
+            <span className="flex-1">{item.label}</span>
+            {hasChildren && (
+              <span className="ml-2 pr-3">
+                {isOpen ? <DownArrow /> : <RightArrow />}
+              </span>
+            )}
+          </div>
+        ) : item.to ? (
+          <Link
+            to={item.to}
+            className={`flex items-center h-9 m-2 rounded-2xl cursor-pointer ${
+              isActiveLeaf ? 'font-bold' : ''
+            }`}
+            style={{
+              marginLeft: 16 + depth * 16,
+              paddingLeft: 10,
+              background: bgColor,
+              textDecoration: 'none',
+              color: 'inherit',
+              display: 'flex',
+            }}
+            onClick={() => toggleItem(key, false)}
+          >
+            {isChosen && (
+              <span className="mr-2 w-2 h-2 bg-white rounded-full" />
+            )}
+            {item.icon && <span className="mr-2 text-[18px]">{item.icon}</span>}
+            <span className="flex-1">{item.label}</span>
+          </Link>
+        ) : (
+          <div
+            className={`flex items-center h-9 m-2 rounded-2xl cursor-pointer ${
+              isActiveLeaf ? 'font-bold' : ''
+            }`}
+            style={{
+              marginLeft: 16 + depth * 16,
+              paddingLeft: 10,
+              background: bgColor,
+            }}
+            onClick={() => toggleItem(key, false)}
+          >
+            {isChosen && (
+              <span className="mr-2 w-2 h-2 bg-white rounded-full" />
+            )}
+            {item.icon && <span className="mr-2 text-[18px]">{item.icon}</span>}
+            <span className="flex-1">{item.label}</span>
+          </div>
+        )}
         {hasChildren &&
           isOpen &&
           item.children.map((child: any) => (

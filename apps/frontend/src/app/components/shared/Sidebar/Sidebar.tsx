@@ -1,29 +1,37 @@
 import React, { useState, useCallback } from 'react';
 import SidebarItem from './SidebarItem';
+import { Link } from 'react-router-dom';
 
 // --- Menu Data ---
 const menuData = [
-  { label: 'Cryptocurrency', icon: '💳', children: [] },
-  { label: 'Devices', icon: '💻', children: [] },
-  { label: 'Magazines', icon: '🎬', children: [] },
+  { label: 'Employees', icon: '🧑‍🤝‍🧑', to: '/employees', children: [] },
+  { label: 'Cryptocurrency', icon: '💳', to: '/cryptocurrency', children: [] },
+  { label: 'Devices', icon: '💻', to: '/devices', children: [] },
+  { label: 'Magazines', icon: '🎬', to: '/magazines', children: [] },
   {
     label: 'Store',
     icon: '🏬',
+    to: '/store',
     children: [
       {
         label: 'Clothes',
+        to: '/store/clothes',
         children: [
-          { label: "Women's Clothing", children: [] },
-          { label: "Men's Clothing", children: [] },
+          {
+            label: "Women's Clothing",
+            to: '/store/clothes/women',
+            children: [],
+          },
+          { label: "Men's Clothing", to: '/store/clothes/men', children: [] },
         ],
       },
-      { label: 'Jewelry', children: [] },
-      { label: 'Music', children: [] },
-      { label: 'Grocery', children: [] },
+      { label: 'Jewelry', to: '/store/jewelry', children: [] },
+      { label: 'Music', to: '/store/music', children: [] },
+      { label: 'Grocery', to: '/store/grocery', children: [] },
     ],
   },
-  { label: 'Collections', icon: '📦', children: [] },
-  { label: 'Credits', icon: '💳', children: [] },
+  { label: 'Collections', icon: '📦', to: '/collections', children: [] },
+  { label: 'Credits', icon: '💳', to: '/credits', children: [] },
 ];
 
 const Sidebar: React.FC = () => {
@@ -157,7 +165,13 @@ const Sidebar: React.FC = () => {
           </button>
         ) : (
           <>
-            All Collections
+            <Link
+              to="/"
+              className="text-white no-underline hover:underline"
+              onClick={() => setActiveLeafKey(null)}
+            >
+              All Collections
+            </Link>
             <span
               className="cursor-pointer font-normal text-[20px]"
               onClick={() => setCollapsed(true)}
@@ -168,7 +182,9 @@ const Sidebar: React.FC = () => {
           </>
         )}
       </div>
-      <div className={collapsed ? 'flex items-center justify-center flex-col' : ''}>
+      <div
+        className={collapsed ? 'flex items-center justify-center flex-col' : ''}
+      >
         {menuData.map((item) => (
           <SidebarItem
             key={item.label}

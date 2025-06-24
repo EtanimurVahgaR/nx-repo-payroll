@@ -3,6 +3,7 @@ import Login from './features/auth/Login';
 import Signup from './features/auth/Signup';
 import Dashboard from './features/dashboard/Dashboard';
 import SidebarLayout from './layout/SidebarLayout';
+import Employee from './features/employees/Employee';
 
 export function App() {
   return (
@@ -12,13 +13,11 @@ export function App() {
           <Route path="login" element={<Login />} />
           <Route path="signup" element={<Signup />} />
         </Route>
-      </Routes>
-      <Routes>
         <Route element={<SidebarLayout />}>
           <Route path="/" element={<Dashboard />} index />
-          <Route path="/2" element={<>2</>} />
-          <Route path="/3" element={<>3</>} />
-          <Route path="/4" element={<>4</>} />
+          <Route path="/employees" element={<Employee />} />
+          <Route path="/employees" element={<Employee />} />
+          
         </Route>
       </Routes>
     </div>
