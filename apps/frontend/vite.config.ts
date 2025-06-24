@@ -8,11 +8,13 @@ export default defineConfig(() => ({
   server: {
     port: 3000,
     host: 'localhost',
+    allowedHosts: ['localhost'],
   },
   preview: {
     port: 3000,
     host: 'localhost',
   },
+
   plugins: [react()],
   // Uncomment this if you are using workers.
   // worker: {

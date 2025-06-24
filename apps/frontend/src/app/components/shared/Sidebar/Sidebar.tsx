@@ -5,33 +5,33 @@ import { Link } from 'react-router-dom';
 // --- Menu Data ---
 const menuData = [
   { label: 'Employees', icon: '🧑‍🤝‍🧑', to: '/employees', children: [] },
-  // { label: 'Cryptocurrency', icon: '💳', to: '/cryptocurrency', children: [] },
-  // { label: 'Devices', icon: '💻', to: '/devices', children: [] },
-  // { label: 'Magazines', icon: '🎬', to: '/magazines', children: [] },
-  // {
-  //   label: 'Store',
-  //   icon: '🏬',
-  //   to: '/store',
-  //   children: [
-  //     {
-  //       label: 'Clothes',
-  //       to: '/store/clothes',
-  //       children: [
-  //         {
-  //           label: "Women's Clothing",
-  //           to: '/store/clothes/women',
-  //           children: [],
-  //         },
-  //         { label: "Men's Clothing", to: '/store/clothes/men', children: [] },
-  //       ],
-  //     },
-  //     { label: 'Jewelry', to: '/store/jewelry', children: [] },
-  //     { label: 'Music', to: '/store/music', children: [] },
-  //     { label: 'Grocery', to: '/store/grocery', children: [] },
-  //   ],
-  // },
-  // { label: 'Collections', icon: '📦', to: '/collections', children: [] },
-  // { label: 'Credits', icon: '💳', to: '/credits', children: [] },
+  { label: 'Attendance', icon: '📅', to: '/attendance', children: [] },
+  { label: 'Devices', icon: '💻', to: '/devices', children: [] },
+  { label: 'Magazines', icon: '🎬', to: '/magazines', children: [] },
+  {
+    label: 'Store',
+    icon: '🏬',
+    to: '/store',
+    children: [
+      {
+        label: 'Clothes',
+        to: '/store/clothes',
+        children: [
+          {
+            label: "Women's Clothing",
+            to: '/store/clothes/women',
+            children: [],
+          },
+          { label: "Men's Clothing", to: '/store/clothes/men', children: [] },
+        ],
+      },
+      { label: 'Jewelry', to: '/store/jewelry', children: [] },
+      { label: 'Music', to: '/store/music', children: [] },
+      { label: 'Grocery', to: '/store/grocery', children: [] },
+    ],
+  },
+  { label: 'Collections', icon: '📦', to: '/collections', children: [] },
+  { label: 'Credits', icon: '💳', to: '/credits', children: [] },
 ];
 
 // SidebarContext to provide collapseSidebar function

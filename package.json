@@ -6,7 +6,7 @@
     "dev": "nx run-many --target=serve --all",
     "backend": "nx run backend:serve ",
     "frontend": "nx run frontend:serve",
-    "postinstall": "cpx \"apps/backend/src/generated/**\" apps/backend/dist/apps/backend/src/generated"
+    "generate": "cpx \"apps/backend/src/generated/**\" apps/backend/dist/apps/backend/src/generated"
   },
   "private": true,
   "dependencies": {
