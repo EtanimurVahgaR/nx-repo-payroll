@@ -15,8 +15,8 @@ datasource db {
 }
 
 model Employee {
-    id                Int       @id @default(autoincrement())
-    employeeCode      String
+    id                Int          @id @default(autoincrement())
+    employeeCode      String       @unique
     name              String
     designation       String
     trade             String
@@ -40,4 +40,15 @@ model Employee {
     esicNumber        String?
     projectId         String?
     emergencyStatusNo String?
+    attendances       Attendance[]
+}
+
+model Attendance {
+    attendance_id Int      @id @default(autoincrement())
+    employee      Employee @relation(fields: [employeeCode], references: [employeeCode])
+    employeeCode  String
+    date          DateTime
+    status        String
+
+    @@unique([employeeCode, date])
 }

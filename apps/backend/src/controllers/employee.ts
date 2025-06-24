@@ -115,3 +115,69 @@ export const add_new_employee = async (req: any, res: any) => {
     return res.status(500).json({ message: 'Error creating employee', error });
   }
 };
+
+export const mark_attendance = async (req: any, res: any) => {
+  const { employeeCode } = req.params;
+  const { date, status } = req.body;
+
+  if (!date) {
+    return res.status(400).json({ message: 'Date is required.' });
+  }
+
+  try {
+    // Check if employee exists
+    const employee = await prisma.employee.findUnique({
+      where: { employeeCode: String(employeeCode) },
+    });
+
+    if (!employee) {
+      return res.status(404).json({ message: 'Employee not found.' });
+    }
+
+    // Ensure only one attendance entry per employee per day
+    const attendance = await prisma.attendance.findUnique({
+      where: {
+        employeeCode_date: {
+          employeeCode: String(employeeCode),
+          date: new Date(date),
+        },
+      },
+    });
+
+    let newStatus = 'present';
+
+    if (attendance) {
+      // If status is specified, use it; otherwise, toggle
+      newStatus = status
+        ? status
+        : String(attendance.status) === 'present'
+        ? 'absent'
+        : 'present';
+
+      const updated = await prisma.attendance.update({
+        where: {
+          employeeCode_date: {
+            employeeCode: String(employeeCode),
+            date: new Date(date),
+          },
+        },
+        data: { status: newStatus },
+      });
+      return res.status(200).json(updated);
+    } else {
+      // If status is specified, use it; otherwise, default to "present"
+      newStatus = status ? status : 'present';
+      const created = await prisma.attendance.create({
+        data: {
+          employeeCode: String(employeeCode),
+          date: new Date(date),
+          status: newStatus,
+        },
+      });
+      return res.status(201).json(created);
+    }
+  } catch (error) {
+    console.error('Error in mark_attendance:', error);
+    return res.status(500).json({ message: 'Error marking attendance', error });
+  }
+};
