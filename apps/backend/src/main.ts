@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import morgan from 'morgan';
 import authRoutes from './routes/auth';
+import employeeRoutes from './routes/employee';
 const host = process.env.HOST ?? 'localhost';
 const port = process.env.PORT ? Number(process.env.PORT) : 8080;
 
@@ -18,7 +19,8 @@ app.use(
   })
 );
 
-app.use('/api', authRoutes);
+app.use('/api/auth', authRoutes);
+app.use('/api/employee', employeeRoutes);
 
 app.get('/', (req, res) => {
   res.send({ message: 'Hello API' });
