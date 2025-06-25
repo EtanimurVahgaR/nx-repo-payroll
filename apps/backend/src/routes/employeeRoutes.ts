@@ -15,10 +15,6 @@ route.use(authenticateJWT);
 route.get('/all', authenticateJWT, get_all_employees);
 route.post('/add-new', add_new_employee);
 
-<<<<<<< HEAD:apps/backend/src/routes/employeeRoutes.ts
-=======
-route.post('/:employeeCode/markAttendance', mark_attendance); 
+route.post('/:employeeCode/markAttendance', mark_attendance);
 
-
->>>>>>> authentication:apps/backend/src/routes/employee.ts
 export default route;
