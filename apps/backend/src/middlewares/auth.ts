@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from 'express';
+import { Request, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 
 const SECRET = process.env.JWT_SECRET || 'supersecretkey';

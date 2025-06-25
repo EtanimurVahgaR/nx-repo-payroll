@@ -16,6 +16,11 @@
     "skipLibCheck": true,
     "strict": true,
     "target": "es2022",
-    "customConditions": ["development"]
+    "customConditions": ["development"],
+    "baseUrl": ".",                        // ✅ Required for path mapping
+    "paths": {
+      "@prisma": ["src/generated/prisma"],       // ✅ Adjust path as needed
+      "@prisma/*": ["src/generated/prisma/*"]
+    }
   }
 }

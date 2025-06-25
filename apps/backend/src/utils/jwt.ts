@@ -1,4 +1,4 @@
-import jwt, { Secret, SignOptions } from 'jsonwebtoken';
+import jwt, { Secret} from 'jsonwebtoken';
 
 const SECRET: Secret = process.env.JWT_SECRET || 'supersecretkey';
 
