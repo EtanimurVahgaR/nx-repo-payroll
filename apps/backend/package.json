@@ -74,13 +74,5 @@
         "command": "docker build -f apps/backend/Dockerfile . -t nx-repo-backend"
       }
     }
-  },
-  "devDependencies": {
-    "@types/jsonwebtoken": "^9.0.10",
-    "prisma": "^6.10.1"
-  },
-  "dependencies": {
-    "@prisma/client": "^6.10.1",
-    "jsonwebtoken": "^9.0.2"
   }
 }
