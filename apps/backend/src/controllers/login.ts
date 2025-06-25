@@ -1,9 +1,21 @@
-export const login = async (req: any, res: any) => {
+import { Request, Response } from 'express';
+import { generateToken } from '../utils/jwt';
+import prisma from '../utils/prismaClient'
+
+export const login = async (req: Request, res: Response) => {
   const { email, password } = req.body;
-  if (!email || !password) {
-    return res.status(400).json({ message: 'Email and password required' });
+
+  const employee = await prisma.employee.findUnique({ where: { email } });
+
+  if (!employee || employee.password !== password) {
+    return res.status(401).json({ message: 'Invalid email or password' });
   }
-  // Actual endpoint: just echo back the email for now
-  return res.json({ message: 'Login received', email });
+
+  const token = generateToken({
+    id: employee.id,
+    email: employee.email,
+    designation: employee.designation,
+  });
+
+  return res.json({ token });
 };
-  

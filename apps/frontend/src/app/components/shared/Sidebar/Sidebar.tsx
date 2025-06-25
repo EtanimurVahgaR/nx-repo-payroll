@@ -1,32 +1,48 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, createContext } from 'react';
 import SidebarItem from './SidebarItem';
+import { Link } from 'react-router-dom';
 
 // --- Menu Data ---
 const menuData = [
-  { label: 'Cryptocurrency', icon: '💳', children: [] },
-  { label: 'Devices', icon: '💻', children: [] },
-  { label: 'Magazines', icon: '🎬', children: [] },
+  { label: 'Employees', icon: '🧑‍🤝‍🧑', to: '/employees', children: [] },
+  { label: 'Attendance', icon: '📅', to: '/attendance', children: [] },
+  { label: 'Devices', icon: '💻', to: '/devices', children: [] },
+  { label: 'Magazines', icon: '🎬', to: '/magazines', children: [] },
   {
     label: 'Store',
     icon: '🏬',
+    to: '/store',
     children: [
       {
         label: 'Clothes',
+        to: '/store/clothes',
         children: [
-          { label: "Women's Clothing", children: [] },
-          { label: "Men's Clothing", children: [] },
+          {
+            label: "Women's Clothing",
+            to: '/store/clothes/women',
+            children: [],
+          },
+          { label: "Men's Clothing", to: '/store/clothes/men', children: [] },
         ],
       },
-      { label: 'Jewelry', children: [] },
-      { label: 'Music', children: [] },
-      { label: 'Grocery', children: [] },
+      { label: 'Jewelry', to: '/store/jewelry', children: [] },
+      { label: 'Music', to: '/store/music', children: [] },
+      { label: 'Grocery', to: '/store/grocery', children: [] },
     ],
   },
-  { label: 'Collections', icon: '📦', children: [] },
-  { label: 'Credits', icon: '💳', children: [] },
+  { label: 'Collections', icon: '📦', to: '/collections', children: [] },
+  { label: 'Credits', icon: '💳', to: '/credits', children: [] },
 ];
 
-const Sidebar: React.FC = () => {
+// SidebarContext to provide collapseSidebar function
+export const SidebarContext = createContext<{ collapseSidebar: () => void }>({
+  collapseSidebar: () => {},
+});
+
+const Sidebar: React.FC<{
+  children?: React.ReactNode;
+  collapsedExternally?: boolean;
+}> = ({ children, collapsedExternally }) => {
   const [openItems, setOpenItems] = useState<Record<string, boolean>>({
     Store: false,
     'Store/Clothes': false,
@@ -35,6 +51,11 @@ const Sidebar: React.FC = () => {
   });
   const [collapsed, setCollapsed] = useState(false);
   const [activeLeafKey, setActiveLeafKey] = useState<string | null>(null);
+
+  // If collapsedExternally is true, collapse the sidebar
+  React.useEffect(() => {
+    if (collapsedExternally) setCollapsed(true);
+  }, [collapsedExternally]);
 
   // Get sibling keys for toggling
   const getSiblingKeys = useCallback((key: string) => {
@@ -137,51 +158,68 @@ const Sidebar: React.FC = () => {
     [getSiblingKeys]
   );
 
+  // Function to collapse sidebar, exposed via context
+  const collapseSidebar = useCallback(() => setCollapsed(true), []);
+
   return (
-    <div
-      className="bg-sidebar text-white h-screen font-sans text-[15px] overflow-y-auto shadow-[2px_0_8px_rgba(0,0,0,0.13)] transition-all duration-200 rounded-2xl rounded-tl-none rounded-bl-none"
-      style={{ width: collapsed ? 64 : 270 }}
-    >
+    <SidebarContext.Provider value={{ collapseSidebar }}>
       <div
-        className={`border-b border-white/15 font-semibold text-[17px] flex items-center min-h-[56px] opacity-70 ${
-          collapsed ? 'justify-center py-4 px-0' : 'justify-between py-4 px-5'
-        }`}
+        className="bg-sidebar text-white h-screen font-sans text-[15px] overflow-y-auto shadow-[2px_0_8px_rgba(0,0,0,0.13)] transition-all duration-200 rounded-2xl rounded-tl-none rounded-bl-none"
+        style={{ width: collapsed ? 64 : 270 }}
       >
-        {collapsed ? (
-          <button
-            className="bg-none border-none text-white text-[22px] cursor-pointer p-0"
-            aria-label="Expand sidebar"
-            onClick={() => setCollapsed(false)}
-          >
-            ≡
-          </button>
-        ) : (
-          <>
-            All Collections
-            <span
-              className="cursor-pointer font-normal text-[20px]"
-              onClick={() => setCollapsed(true)}
-              aria-label="Collapse sidebar"
+        <div
+          className={`border-b border-white/15 font-semibold text-[17px] flex items-center min-h-[56px] opacity-70 ${
+            collapsed ? 'justify-center py-4 px-0' : 'justify-between py-4 px-5'
+          }`}
+        >
+          {collapsed ? (
+            <button
+              className="bg-none border-none text-white text-[22px] cursor-pointer p-0"
+              aria-label="Expand sidebar"
+              onClick={() => setCollapsed(false)}
             >
-              ×
-            </span>
-          </>
-        )}
+              ≡
+            </button>
+          ) : (
+            <>
+              <Link
+                to="/"
+                className="text-white no-underline hover:underline"
+                onClick={() => setActiveLeafKey(null)}
+              >
+                All Collections
+              </Link>
+              <span
+                className="cursor-pointer font-normal text-[20px]"
+                onClick={() => setCollapsed(true)}
+                aria-label="Collapse sidebar"
+              >
+                ×
+              </span>
+            </>
+          )}
+        </div>
+        <div
+          className={
+            collapsed ? 'flex items-center justify-center flex-col' : ''
+          }
+        >
+          {menuData.map((item) => (
+            <SidebarItem
+              key={item.label}
+              item={item}
+              openItems={openItems}
+              toggleItem={toggleItem}
+              collapsed={collapsed}
+              expandAndOpenItem={expandAndOpenItem}
+              activeLeafKey={activeLeafKey}
+            />
+          ))}
+        </div>
+        {/* Render children (Outlet) here if needed */}
+        {children}
       </div>
-      <div className={collapsed ? 'flex items-center justify-center flex-col' : ''}>
-        {menuData.map((item) => (
-          <SidebarItem
-            key={item.label}
-            item={item}
-            openItems={openItems}
-            toggleItem={toggleItem}
-            collapsed={collapsed}
-            expandAndOpenItem={expandAndOpenItem}
-            activeLeafKey={activeLeafKey}
-          />
-        ))}
-      </div>
-    </div>
+    </SidebarContext.Provider>
   );
 };
 

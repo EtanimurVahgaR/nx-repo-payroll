@@ -16,6 +16,13 @@ module.exports = {
         sidebar: {
           DEFAULT: 'rgb(0,63,125)', // base blue for sidebar
         },
+        bg: {
+          DARKEST: '',
+          DARK: '',
+          DEFAULT: '',
+          LIGHT: '',
+          LIGHTEST: 'rgb(236,246,255)',
+        },
       },
     },
   },
