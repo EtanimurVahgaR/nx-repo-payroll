@@ -1,8 +1,8 @@
 import express from 'express';
 import cors from 'cors';
 import morgan from 'morgan';
-import authRoutes from './routes/auth';
-import employeeRoutes from './routes/employee';
+import authRoutes from './routes/authRoutes';
+import employeeRoutes from './routes/employeeRoutes';
 const host = process.env.HOST ?? 'localhost';
 const port = process.env.PORT ? Number(process.env.PORT) : 8080;
 
