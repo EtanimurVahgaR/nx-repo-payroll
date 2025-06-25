@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { getToken } from '../../utils/authUtils';
 
 interface EmployeeType {
   id: number;
@@ -72,7 +73,12 @@ const Employee = () => {
 
   const fetchEmployees = async () => {
     try {
-      const response = await fetch('http://localhost:8080/api/employee/all');
+      const token = getToken();
+      const response = await fetch('http://localhost:8080/api/employee/all', {
+        headers: {
+          Authorization: token ? `Bearer ${token}` : '',
+        },
+      });
       if (!response.ok) throw new Error('Failed to fetch employees');
       const data = await response.json();
       setEmployees(data);

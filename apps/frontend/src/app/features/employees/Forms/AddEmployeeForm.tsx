@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useSidebarContext } from '../../../components/shared/Sidebar/SidebarContext';
+import { getToken } from '../../../utils/authUtils';
 
 const AddEmployeeForm = () => {
   const { setLastClickedInOutlet } = useSidebarContext();
   const [form, setForm] = useState({
     employeeCode: '',
     name: '',
+    email: '', // Added
+    password: '', // Added
     designation: '',
     trade: '',
     grade: '',
@@ -44,11 +47,16 @@ const AddEmployeeForm = () => {
     e.preventDefault();
     setMessage('');
     try {
+      const token = getToken();
       const res = await axios.post(
-        'http://localhost:8080/api/employee/add-new',
+        // TODO: create a new signup for employees
+        'http://localhost:8080/api/auth/Employee_signup',
         form,
         {
-          headers: { 'Content-Type': 'application/json' },
+          headers: {
+            'Content-Type': 'application/json',
+            ...(token ? { Authorization: `Bearer ${token}` } : {}),
+          },
         }
       );
       if (res.status === 201) {
@@ -56,6 +64,8 @@ const AddEmployeeForm = () => {
         setForm({
           employeeCode: '',
           name: '',
+          email: '', // Reset
+          password: '', // Reset
           designation: '',
           trade: '',
           grade: '',
@@ -118,6 +128,26 @@ const AddEmployeeForm = () => {
               name="name"
               placeholder="Full Name"
               value={form.name}
+              onChange={handleChange}
+              onFocus={handleInputFocus}
+              className="input-field"
+              required
+            />
+            <input
+              name="email"
+              type="email"
+              placeholder="Email"
+              value={form.email}
+              onChange={handleChange}
+              onFocus={handleInputFocus}
+              className="input-field"
+              required
+            />
+            <input
+              name="password"
+              type="password"
+              placeholder="Password"
+              value={form.password}
               onChange={handleChange}
               onFocus={handleInputFocus}
               className="input-field"

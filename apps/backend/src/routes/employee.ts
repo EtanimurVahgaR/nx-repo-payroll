@@ -11,7 +11,7 @@ const route = Router();
 route.post('/add-test-user', add_test_user);
 
 route.use(authenticateJWT);
-route.get('/all', get_all_employees);
+route.get('/all', authenticateJWT, get_all_employees);
 route.post('/add-new', add_new_employee);
 
 export default route;

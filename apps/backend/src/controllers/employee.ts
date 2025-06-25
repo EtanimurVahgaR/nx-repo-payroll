@@ -2,6 +2,7 @@ import prisma from '../utils/prismaClient';
 
 export const add_test_user = async (req: any, res: any) => {
   try {
+    // All required fields must be present
     const employee = await prisma.employee.create({
       data: {
         employeeCode: '1',
@@ -9,7 +10,8 @@ export const add_test_user = async (req: any, res: any) => {
         designation: 'officer',
         trade: 'software',
         grade: 'high skilled',
-        // Add other fields as needed, using null or default values for optional fields
+        email: 'testuser@example.com', // required and unique
+        password: 'testpassword', // required
         dateOfJoining: null,
         dob: null,
         phoneNumber: null,
@@ -73,7 +75,22 @@ export const add_new_employee = async (req: any, res: any) => {
       esicNumber,
       projectId,
       emergencyStatusNo,
+      email,
+      password,
     } = req.body;
+
+    // Validate required fields
+    if (
+      !employeeCode ||
+      !name ||
+      !designation ||
+      !trade ||
+      !grade ||
+      !email ||
+      !password
+    ) {
+      return res.status(400).json({ message: 'Missing required fields' });
+    }
 
     // Convert empty strings to null for optional fields
     const toNull = (v: any) => (v === '' ? null : v);
@@ -84,6 +101,8 @@ export const add_new_employee = async (req: any, res: any) => {
       designation,
       trade,
       grade,
+      email,
+      password,
       dateOfJoining: toNull(dateOfJoining) ? new Date(dateOfJoining) : null,
       dob: toNull(dob) ? new Date(dob) : null,
       phoneNumber: toNull(phoneNumber),

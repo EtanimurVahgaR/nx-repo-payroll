@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { setToken } from '../../utils/authUtils';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -12,12 +13,17 @@ const Login = () => {
     setError(null);
     setLoading(true);
     try {
-      const res = await axios.post('http://localhost:8080/api/auth/login', {
-        email,
-        password,
-      });
-      console.log(res);
-      // handle success (e.g., save token, redirect, etc.)
+      const res = await axios.post(
+        'http://localhost:8080/api/auth/client-login',
+        {
+          email,
+          password,
+        }
+      );
+      if (res.data && res.data.token) {
+        setToken(res.data.token);
+        // Optionally redirect or update UI here
+      }
       setLoading(false);
     } catch (err: any) {
       console.log(err);
