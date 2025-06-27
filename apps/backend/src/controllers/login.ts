@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { generateToken } from '../utils/jwt';
+import { generateToken, authToken } from '../utils/jwt';
 import prisma from '../utils/prismaClient';
 import bcrypt from 'bcryptjs';
 
@@ -31,5 +31,10 @@ export const clientLogin = async (req: Request, res: Response) => {
     email: client.email,
     designation: 'client',
   });
-  return res.json({ token });
+
+  const roleToken = authToken({
+    designation: 'client',
+  });
+  
+  return res.json({ token, roleToken });
 };

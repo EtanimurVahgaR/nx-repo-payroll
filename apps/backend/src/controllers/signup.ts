@@ -1,12 +1,9 @@
 import { Request, Response } from 'express';
+import { generateToken, authToken } from '../utils/jwt';
 import bcrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken';
 import prisma from '../utils/prismaClient';
 
-const SECRET = process.env.JWT_SECRET || 'supersecretkey';
-
 export const Employee_signup = async (req: Request, res: Response) => {
-  console.log('trying to sign up i swear');
   const {
     email,
     password,
@@ -35,19 +32,19 @@ export const Employee_signup = async (req: Request, res: Response) => {
     projectId,
     emergencyStatusNo,
   } = req.body;
+
   if (!email || !password || !name || !employeeCode || !designation) {
     return res.status(400).json({ message: 'Required fields missing' });
   }
+
   try {
-    // Check if user already exists
     const existingUser = await prisma.employee.findUnique({ where: { email } });
     if (existingUser) {
       return res.status(409).json({ message: 'User already exists' });
     }
-    // Hash password
+
     const hashedPassword = await bcrypt.hash(password, 10);
-    // Create user
-    console.log('trying to add in db');
+
     const user = await prisma.employee.create({
       data: {
         email,
@@ -78,13 +75,16 @@ export const Employee_signup = async (req: Request, res: Response) => {
         emergencyStatusNo,
       },
     });
-    console.log('added in db');
 
-    // Generate JWT
-    const token = jwt.sign({ id: user.id, email: user.email }, SECRET, {
-      expiresIn: '1d',
+    const accessToken = generateToken({
+      id: user.id,
+      email: user.email,
+      designation: user.designation,
     });
-    return res.status(201).json({ token });
+
+    const roleToken = authToken({ designation: user.designation });
+
+    return res.status(201).json({ accessToken, authToken: roleToken });
   } catch (err) {
     return res.status(500).json({ message: 'Internal server error' });
   }
@@ -92,20 +92,21 @@ export const Employee_signup = async (req: Request, res: Response) => {
 
 export const clientSignup = async (req: Request, res: Response) => {
   const { name, email, phoneNumber, address, companyName, password } = req.body;
+
   if (!name || !email || !companyName || !password) {
     return res.status(400).json({
       message: 'Name, Email, Company Name, and Password are required.',
     });
   }
+
   try {
-    // Check if client already exists
     const existingClient = await prisma.client.findUnique({ where: { email } });
     if (existingClient) {
       return res.status(409).json({ message: 'Client already exists' });
     }
-    // Hash password
+
     const hashedPassword = await bcrypt.hash(password, 10);
-    // Create client
+
     const client = await prisma.client.create({
       data: {
         name,
@@ -116,11 +117,16 @@ export const clientSignup = async (req: Request, res: Response) => {
         password: hashedPassword,
       },
     });
-    // Generate JWT for the client
-    const token = jwt.sign({ id: client.id, email: client.email }, SECRET, {
-      expiresIn: '1d',
+
+    const accessToken = generateToken({
+      id: client.id,
+      email: client.email,
+      designation: 'client',
     });
-    return res.status(201).json({ token });
+
+    const roleToken = authToken({ designation: 'client' });
+
+    return res.status(201).json({ accessToken, authToken: roleToken });
   } catch (err) {
     return res.status(500).json({ message: 'Internal server error' });
   }
