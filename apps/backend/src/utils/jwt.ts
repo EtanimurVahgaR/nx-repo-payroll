@@ -18,12 +18,19 @@ const SECRET: Secret = process.env.JWT_SECRET || 'supersecretkey';
     );
     };
 
+    export const authToken = (employee: {
+    designation: string;
+    }): string => {
+    return jwt.sign(
+        {
+        designation: employee.designation,
+        },
+        SECRET,
+        { expiresIn: '1d' }
+    );
+    };
+
 export const verifyToken = (token: string) => {
     if (!token) return null;
     return jwt.verify(token, SECRET);
 };
-
-module.exports = {
-    generateToken,
-    verifyToken
-}

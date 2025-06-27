@@ -5,13 +5,14 @@ import {
   get_all_employees,
   mark_attendance,
 } from '../controllers/employee';
-import { authenticateJWT } from '../middlewares/auth';
+import { authenticateJWT, authorizeByDesignation } from '../middlewares/auth';
 
 const route = Router();
 
 route.post('/add-test-user', add_test_user);
 
 route.use(authenticateJWT);
+route.use(authorizeByDesignation);
 route.get('/all', authenticateJWT, get_all_employees);
 route.post('/add-new', add_new_employee);
 

@@ -18,3 +18,24 @@ export const authenticateJWT = (req: Request, res: any, next: NextFunction) => {
     return res.status(403).json({ message: 'Forbidden: Invalid token' });
   }
 };
+
+export const authorizeByDesignation = (allowedDesignations: string[]) => {
+  return (req: Request, res: any, next: NextFunction) => {
+    const authHeader = req.headers.authorization;
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      return res.status(401).json({ message: 'Unauthorized: No token provided' });
+    }
+
+    const token = authHeader.split(' ')[1];
+    try {
+      const decoded = jwt.verify(token, SECRET) as { designation?: string };
+      if (!decoded.designation || !allowedDesignations.includes(decoded.designation)) {
+        return res.status(403).json({ message: 'Forbidden: Insufficient role' });
+      }
+      (req as any).designation = decoded.designation;
+      next();
+    } catch (err) {
+      return res.status(403).json({ message: 'Forbidden: Invalid token' });
+    }
+  };
+};
