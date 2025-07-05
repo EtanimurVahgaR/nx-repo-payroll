@@ -12,7 +12,7 @@ const route = Router();
 route.post('/add-test-user', add_test_user);
 
 route.use(authenticateJWT);
-route.use(authorizeByDesignation);
+route.use(authorizeByDesignation(['client']));
 route.get('/all', get_all_employees);
 route.post('/add-new', add_new_employee);
 

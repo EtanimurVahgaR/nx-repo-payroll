@@ -14,7 +14,7 @@ module.exports = {
     extend: {
       colors: {
         sidebar: {
-          DEFAULT: 'rgb(255,100,0)', // base blue for sidebar
+          DEFAULT: 'rgb(20,100,125)', // base blue for sidebar
         },
         bg: {
           DARKEST: '',
