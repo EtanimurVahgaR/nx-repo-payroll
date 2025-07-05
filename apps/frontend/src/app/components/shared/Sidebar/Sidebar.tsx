@@ -166,6 +166,8 @@ const Sidebar: React.FC<{
       <div
         className="bg-sidebar text-white h-screen font-sans text-[15px] overflow-y-auto shadow-[2px_0_8px_rgba(0,0,0,0.13)] transition-all duration-200 rounded-2xl rounded-tl-none rounded-bl-none"
         style={{ width: collapsed ? 64 : 270 }}
+        onMouseEnter={() => setCollapsed(false)}
+        onMouseLeave={() => setCollapsed(true)}
       >
         <div
           className={`border-b border-white/15 font-semibold text-[17px] flex items-center min-h-[56px] opacity-70 ${
