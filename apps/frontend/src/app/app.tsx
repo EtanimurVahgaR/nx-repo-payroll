@@ -6,6 +6,7 @@ import SidebarLayout from './layout/SidebarLayout';
 import Employee from './features/employees/Employee';
 import AddEmployeeForm from './features/employees/Forms/AddEmployeeForm';
 import { removeToken, isAuthenticated } from './utils/authUtils';
+import Attendance from './features/attendance/Attendance';
 
 export function App() {
   const navigate = useNavigate();
@@ -34,6 +35,7 @@ export function App() {
           <Route path="/" element={<Dashboard />} index />
           <Route path="/employees" element={<Employee />} />
           <Route path="/employees/add-new" element={<AddEmployeeForm />} />
+          <Route path="/attendance" element={<Attendance />} />
         </Route>
       </Routes>
     </div>
